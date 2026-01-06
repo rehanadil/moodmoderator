@@ -42,6 +42,15 @@ class MoodModerator_Comment_Handler {
 	private $ai;
 
 	/**
+	 * Temporary storage for sentiment data between hooks.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 * @var    array
+	 */
+	private static $pending_sentiments = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -109,12 +118,16 @@ class MoodModerator_Comment_Handler {
 
 		// Store sentiment data temporarily (will be saved via comment_post hook)
 		// We can't save meta here because comment doesn't exist yet
-		$comment_data['moodmoderator_sentiment'] = array(
+		$sentiment_data = array(
 			'tone'         => $sentiment['tone'],
 			'confidence'   => $sentiment['confidence'],
 			'reasoning'    => $sentiment['reasoning'],
 			'content_hash' => $content_hash,
 		);
+
+		// Store in static variable for retrieval in save_sentiment_meta
+		// Use content hash as key for lookup
+		self::$pending_sentiments[ $content_hash ] = $sentiment_data;
 
 		// Apply moderation rules
 		$should_hold = $this->should_hold_comment( $sentiment['tone'], $sentiment['confidence'] );
@@ -149,33 +162,43 @@ class MoodModerator_Comment_Handler {
 	 * @param mixed $comment_approved Comment approval status.
 	 */
 	public function save_sentiment_meta( $comment_id, $comment_approved ) {
-		// Get the sentiment data we stored earlier
+		// Get the comment
 		$comment = get_comment( $comment_id );
 
 		if ( ! $comment ) {
 			return;
 		}
 
-		// Check if we have sentiment data in memory (from process_comment)
-		// This is a hack because we can't pass data between hooks easily
-		// We'll retrieve it from a transient set in process_comment
-		$sentiment = get_transient( 'moodmoderator_pending_sentiment_' . $comment_id );
+		// Generate content hash to look up stored sentiment
+		$content_hash = $this->cache->generate_content_hash(
+			$comment->comment_content,
+			$comment->comment_author_email
+		);
 
+		// Try to get sentiment from static storage
+		$sentiment = false;
+		if ( isset( self::$pending_sentiments[ $content_hash ] ) ) {
+			$sentiment = self::$pending_sentiments[ $content_hash ];
+
+			// Clean up after retrieval
+			unset( self::$pending_sentiments[ $content_hash ] );
+		}
+
+		// Fallback: analyze now if not found in storage
 		if ( ! $sentiment ) {
-			// Fallback: analyze now if not already done
-			$content_hash = $this->cache->generate_content_hash(
-				$comment->comment_content,
-				$comment->comment_author_email
-			);
-
 			$context = array();
 			$post = get_post( $comment->comment_post_ID );
 			if ( $post ) {
 				$context['post_title'] = $post->post_title;
 			}
 
-			$sentiment = $this->ai->analyze_sentiment( $comment->comment_content, $context );
-			$sentiment['content_hash'] = $content_hash;
+			$analysis = $this->ai->analyze_sentiment( $comment->comment_content, $context );
+			$sentiment = array(
+				'tone'         => $analysis['tone'],
+				'confidence'   => $analysis['confidence'],
+				'reasoning'    => $analysis['reasoning'],
+				'content_hash' => $content_hash,
+			);
 		}
 
 		// Save to database
@@ -186,9 +209,6 @@ class MoodModerator_Comment_Handler {
 			isset( $sentiment['reasoning'] ) ? $sentiment['reasoning'] : '',
 			$sentiment['content_hash']
 		);
-
-		// Clean up transient
-		delete_transient( 'moodmoderator_pending_sentiment_' . $comment_id );
 	}
 
 	/**
