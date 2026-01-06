@@ -4,178 +4,237 @@
  * @package MoodModerator
  */
 
-(function($) {
+(function() {
     'use strict';
 
     /**
-     * Handle tone approval
+     * Make AJAX request
      */
-    $(document).on('click', '.moodmoderator-approve-tone', function(e) {
-        e.preventDefault();
+    function makeAjaxRequest(action, data, successCallback, errorCallback) {
+        const formData = new FormData();
+        formData.append('action', action);
+        formData.append('nonce', moodModeratorData.nonce);
 
-        var $button = $(this);
-        var suggestionId = $button.data('id');
-        var $row = $button.closest('tr');
-
-        if (!suggestionId) {
-            return;
-        }
-
-        $button.prop('disabled', true).text('Processing...');
-
-        $.ajax({
-            url: moodModeratorData.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'moodmoderator_approve_tone',
-                nonce: moodModeratorData.nonce,
-                suggestion_id: suggestionId
-            },
-            success: function(response) {
-                if (response.success) {
-                    $row.addClass('approved');
-                    $button.replaceWith('<span style="color: green;">✓ Approved</span>');
-                    $row.find('.moodmoderator-reject-tone').remove();
-
-                    // Show success message
-                    showMessage('success', response.data.message);
-                } else {
-                    alert(response.data.message || 'Failed to approve tone');
-                    $button.prop('disabled', false).text('Approve');
-                }
-            },
-            error: function() {
-                alert('An error occurred. Please try again.');
-                $button.prop('disabled', false).text('Approve');
+        // Add additional data
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                formData.append(key, data[key]);
             }
-        });
-    });
-
-    /**
-     * Handle tone rejection
-     */
-    $(document).on('click', '.moodmoderator-reject-tone', function(e) {
-        e.preventDefault();
-
-        var $button = $(this);
-        var suggestionId = $button.data('id');
-        var $row = $button.closest('tr');
-
-        if (!suggestionId) {
-            return;
         }
 
-        $button.prop('disabled', true).text('Processing...');
-
-        $.ajax({
-            url: moodModeratorData.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'moodmoderator_reject_tone',
-                nonce: moodModeratorData.nonce,
-                suggestion_id: suggestionId
-            },
-            success: function(response) {
-                if (response.success) {
-                    $row.addClass('rejected');
-                    $button.replaceWith('<span style="color: red;">✗ Rejected</span>');
-                    $row.find('.moodmoderator-approve-tone').remove();
-
-                    // Show success message
-                    showMessage('success', response.data.message);
-                } else {
-                    alert(response.data.message || 'Failed to reject tone');
-                    $button.prop('disabled', false).text('Reject');
-                }
-            },
-            error: function() {
-                alert('An error occurred. Please try again.');
-                $button.prop('disabled', false).text('Reject');
+        fetch(moodModeratorData.ajaxUrl, {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                successCallback(data);
+            } else {
+                errorCallback(data);
             }
+        })
+        .catch(error => {
+            console.error('AJAX Error:', error);
+            errorCallback({ data: { message: 'An error occurred. Please try again.' } });
         });
-    });
-
-    /**
-     * Handle cache clearing
-     */
-    $(document).on('click', '#moodmoderator-clear-cache', function(e) {
-        e.preventDefault();
-
-        if (!confirm(moodModeratorData.strings.confirmClearCache)) {
-            return;
-        }
-
-        var $button = $(this);
-        $button.prop('disabled', true).text('Clearing...');
-
-        $.ajax({
-            url: moodModeratorData.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'moodmoderator_clear_cache',
-                nonce: moodModeratorData.nonce
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert(response.data.message);
-                    location.reload();
-                } else {
-                    alert(response.data.message || 'Failed to clear cache');
-                    $button.prop('disabled', false).text('Clear All Caches');
-                }
-            },
-            error: function() {
-                alert('An error occurred. Please try again.');
-                $button.prop('disabled', false).text('Clear All Caches');
-            }
-        });
-    });
-
-    /**
-     * View metadata details
-     */
-    $(document).on('click', '.moodmoderator-view-metadata', function(e) {
-        e.preventDefault();
-
-        // Use .attr() to get the raw string, not .data() which auto-parses JSON
-        var metadata = $(this).attr('data-metadata');
-
-        if (!metadata) {
-            return;
-        }
-
-        // Try to parse and pretty-print JSON
-        try {
-            var parsed = JSON.parse(metadata);
-            var formatted = JSON.stringify(parsed, null, 2);
-            alert(formatted);
-        } catch(err) {
-            // If parsing fails, just show the raw string
-            alert(metadata);
-        }
-    });
+    }
 
     /**
      * Show success/error message
      */
     function showMessage(type, message) {
-        var $message = $('<div class="moodmoderator-message ' + type + '">' + message + '</div>');
-        $message.insertAfter('.wrap h1').delay(3000).fadeOut(function() {
-            $(this).remove();
-        });
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'moodmoderator-message ' + type;
+        messageDiv.textContent = message;
+
+        const wrapHeading = document.querySelector('.wrap h1');
+        if (wrapHeading) {
+            wrapHeading.insertAdjacentElement('afterend', messageDiv);
+
+            // Fade out and remove after 3 seconds
+            setTimeout(() => {
+                messageDiv.style.transition = 'opacity 0.5s';
+                messageDiv.style.opacity = '0';
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 500);
+            }, 3000);
+        }
     }
+
+    /**
+     * Handle tone approval
+     */
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('moodmoderator-approve-tone')) {
+            e.preventDefault();
+
+            const button = e.target;
+            const suggestionId = button.getAttribute('data-id');
+            const row = button.closest('tr');
+
+            if (!suggestionId) {
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Processing...';
+
+            makeAjaxRequest(
+                'moodmoderator_approve_tone',
+                { suggestion_id: suggestionId },
+                function(response) {
+                    row.classList.add('approved');
+                    const approvedSpan = document.createElement('span');
+                    approvedSpan.style.color = 'green';
+                    approvedSpan.textContent = '✓ Approved';
+                    button.replaceWith(approvedSpan);
+
+                    const rejectButton = row.querySelector('.moodmoderator-reject-tone');
+                    if (rejectButton) {
+                        rejectButton.remove();
+                    }
+
+                    showMessage('success', response.data.message);
+                },
+                function(response) {
+                    alert(response.data.message || 'Failed to approve tone');
+                    button.disabled = false;
+                    button.textContent = 'Approve';
+                }
+            );
+        }
+    });
+
+    /**
+     * Handle tone rejection
+     */
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('moodmoderator-reject-tone')) {
+            e.preventDefault();
+
+            const button = e.target;
+            const suggestionId = button.getAttribute('data-id');
+            const row = button.closest('tr');
+
+            if (!suggestionId) {
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Processing...';
+
+            makeAjaxRequest(
+                'moodmoderator_reject_tone',
+                { suggestion_id: suggestionId },
+                function(response) {
+                    row.classList.add('rejected');
+                    const rejectedSpan = document.createElement('span');
+                    rejectedSpan.style.color = 'red';
+                    rejectedSpan.textContent = '✗ Rejected';
+                    button.replaceWith(rejectedSpan);
+
+                    const approveButton = row.querySelector('.moodmoderator-approve-tone');
+                    if (approveButton) {
+                        approveButton.remove();
+                    }
+
+                    showMessage('success', response.data.message);
+                },
+                function(response) {
+                    alert(response.data.message || 'Failed to reject tone');
+                    button.disabled = false;
+                    button.textContent = 'Reject';
+                }
+            );
+        }
+    });
+
+    /**
+     * Handle cache clearing
+     */
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'moodmoderator-clear-cache') {
+            e.preventDefault();
+
+            if (!confirm(moodModeratorData.strings.confirmClearCache)) {
+                return;
+            }
+
+            const button = e.target;
+            button.disabled = true;
+            button.textContent = 'Clearing...';
+
+            makeAjaxRequest(
+                'moodmoderator_clear_cache',
+                {},
+                function(response) {
+                    alert(response.data.message);
+                    location.reload();
+                },
+                function(response) {
+                    alert(response.data.message || 'Failed to clear cache');
+                    button.disabled = false;
+                    button.textContent = 'Clear All Caches';
+                }
+            );
+        }
+    });
+
+    /**
+     * View metadata details
+     */
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('moodmoderator-view-metadata')) {
+            e.preventDefault();
+
+            const metadata = e.target.getAttribute('data-metadata');
+
+            if (!metadata) {
+                return;
+            }
+
+            // Try to parse and pretty-print JSON
+            try {
+                const parsed = JSON.parse(metadata);
+                const formatted = JSON.stringify(parsed, null, 2);
+                alert(formatted);
+            } catch(err) {
+                // If parsing fails, just show the raw string
+                alert(metadata);
+            }
+        }
+    });
 
     /**
      * Toggle custom tones field based on strictness selection
      */
-    $('#moodmoderator_strictness').on('change', function() {
-        var $customTonesField = $('#moodmoderator_custom_tones_field');
+    document.addEventListener('DOMContentLoaded', function() {
+        const strictnessSelect = document.getElementById('moodmoderator_strictness');
 
-        if ($(this).val() === 'custom') {
-            $customTonesField.closest('tr').show();
-        } else {
-            $customTonesField.closest('tr').hide();
+        if (strictnessSelect) {
+            function toggleCustomTonesField() {
+                const customTonesField = document.getElementById('moodmoderator_custom_tones_field');
+
+                if (customTonesField) {
+                    const row = customTonesField.closest('tr');
+                    if (row) {
+                        if (strictnessSelect.value === 'custom') {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                }
+            }
+
+            strictnessSelect.addEventListener('change', toggleCustomTonesField);
+
+            // Trigger on load
+            toggleCustomTonesField();
         }
-    }).trigger('change');
+    });
 
-})(jQuery);
+})();

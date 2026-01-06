@@ -78,7 +78,7 @@ class MoodModerator_Admin {
 			wp_enqueue_script(
 				'moodmoderator-admin',
 				MOODMODERATOR_PLUGIN_URL . 'assets/js/moodmoderator-admin.js',
-				array( 'jquery' ),
+				array(), // No dependencies - vanilla JavaScript only
 				MOODMODERATOR_VERSION,
 				true
 			);
