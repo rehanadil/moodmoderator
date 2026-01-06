@@ -442,11 +442,12 @@ class MoodModerator_Settings {
 		}
 
 		$salt = wp_salt( 'auth' );
-		$encrypted = '';
+		$key_length = strlen( $key );
 		$salt_length = strlen( $salt );
+		$encrypted = '';
 
-		for ( $i = 0; $i < strlen( $key ); $i++ ) {
-			$encrypted .= $key[ $i ] ^ $salt[ $i % $salt_length ];
+		for ( $i = 0; $i < $key_length; $i++ ) {
+			$encrypted .= chr( ord( $key[ $i ] ) ^ ord( $salt[ $i % $salt_length ] ) );
 		}
 
 		return base64_encode( $encrypted );

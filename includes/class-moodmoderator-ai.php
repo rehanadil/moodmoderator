@@ -351,12 +351,17 @@ class MoodModerator_AI {
 		$salt = wp_salt( 'auth' );
 		$decoded = base64_decode( $encrypted );
 
-		// XOR decryption
-		$decrypted = '';
-		$salt_length = strlen( $salt );
+		if ( $decoded === false ) {
+			return '';
+		}
 
-		for ( $i = 0; $i < strlen( $decoded ); $i++ ) {
-			$decrypted .= $decoded[ $i ] ^ $salt[ $i % $salt_length ];
+		// XOR decryption
+		$decoded_length = strlen( $decoded );
+		$salt_length = strlen( $salt );
+		$decrypted = '';
+
+		for ( $i = 0; $i < $decoded_length; $i++ ) {
+			$decrypted .= chr( ord( $decoded[ $i ] ) ^ ord( $salt[ $i % $salt_length ] ) );
 		}
 
 		return $decrypted;
