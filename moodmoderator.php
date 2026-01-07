@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:       MoodModerator – AI Comment Moderation & Tone Analysis
- * Plugin URI:        https://rehanadil.dev
  * Description:       AI-powered comment sentiment analysis using OpenAI. Automatically moderates negative comments and provides comprehensive sentiment analytics.
  * Version:           1.0.0
  * Author:            Rehan Adil
