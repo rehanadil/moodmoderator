@@ -17,16 +17,60 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build release archive
+      - name: Extract version from tag
+        id: version
         run: |
           TAG_NAME="${GITHUB_REF_NAME}"
-          ZIP_NAME="moodmoderator-${TAG_NAME}.zip"
+          VERSION="${TAG_NAME#v}"
+          echo "tag=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Release version: ${VERSION}"
+
+      - name: Build release archive
+        run: |
+          TAG_NAME="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+          ZIP_NAME="moodmoderator-${VERSION}.zip"
+
+          # Create clean ZIP using git archive (respects .gitattributes)
           git archive --format=zip --prefix=moodmoderator/ -o "${ZIP_NAME}" "${TAG_NAME}"
+
+          # Display ZIP contents for verification
+          echo "=== ZIP Contents ==="
+          unzip -l "${ZIP_NAME}" | head -20
+
           echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
+          echo "zip_path=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
         id: build_zip
+
+      - name: Extract changelog from readme.txt
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Extract changelog for this version from readme.txt
+          CHANGELOG=$(awk "/= ${VERSION} =/{flag=1; next} /= [0-9]/{flag=0} flag" readme.txt | sed 's/^\* /- /')
+
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="Release version ${VERSION}"
+          fi
+
+          # Save to file for multiline content
+          echo "$CHANGELOG" > /tmp/changelog.txt
+          echo "changelog_file=/tmp/changelog.txt" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.build_zip.outputs.zip_name }}
-          generate_release_notes: true
+          name: "MoodModerator ${{ steps.version.outputs.version }}"
+          body_path: ${{ steps.changelog.outputs.changelog_file }}
+          files: ${{ steps.build_zip.outputs.zip_path }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset info
+        run: |
+          echo "✅ Release created successfully!"
+          echo "📦 Version: ${{ steps.version.outputs.version }}"
+          echo "📁 ZIP file: ${{ steps.build_zip.outputs.zip_name }}"
+          echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}"
