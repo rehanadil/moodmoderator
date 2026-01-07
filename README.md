@@ -294,7 +294,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 ```
 
-See [LICENSE.txt](LICENSE.txt) for full license text.
+See [LICENSE](LICENSE) for full license text.
 
 ## Author
 
