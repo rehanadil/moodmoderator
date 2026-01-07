@@ -1,0 +1,5 @@
+# Exclude GitHub-specific files from releases
+README.md export-ignore
+.github/ export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
