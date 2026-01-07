@@ -125,17 +125,50 @@ class MoodModerator_Comment_Handler {
 			'content_hash' => $content_hash,
 		);
 
-		// Store in static variable for retrieval in save_sentiment_meta
+		// Store in static variable for retrieval in save_sentiment_meta and filter_comment_approval
 		// Use content hash as key for lookup
 		self::$pending_sentiments[ $content_hash ] = $sentiment_data;
+
+		// Register hook to save meta after comment is inserted
+		add_action( 'comment_post', array( $this, 'save_sentiment_meta' ), 10, 2 );
+
+		return $comment_data;
+	}
+
+	/**
+	 * Filter comment approval status based on sentiment analysis.
+	 *
+	 * Hooked to pre_comment_approved filter.
+	 *
+	 * @since 1.0.0
+	 * @param int|string|WP_Error $approved    The approval status.
+	 * @param array               $commentdata The comment data.
+	 * @return int|string|WP_Error Modified approval status.
+	 */
+	public function filter_comment_approval( $approved, $commentdata ) {
+		// Don't override spam or WP_Error
+		if ( 'spam' === $approved || is_wp_error( $approved ) ) {
+			return $approved;
+		}
+
+		// Generate content hash to look up stored sentiment
+		$content_hash = $this->cache->generate_content_hash(
+			$commentdata['comment_content'],
+			$commentdata['comment_author_email']
+		);
+
+		// Check if we have sentiment data for this comment
+		if ( ! isset( self::$pending_sentiments[ $content_hash ] ) ) {
+			return $approved; // No sentiment data, use WordPress default
+		}
+
+		$sentiment = self::$pending_sentiments[ $content_hash ];
 
 		// Apply moderation rules
 		$should_hold = $this->should_hold_comment( $sentiment['tone'], $sentiment['confidence'] );
 
 		if ( $should_hold ) {
-			// Set comment to pending moderation
-			$comment_data['comment_approved'] = 0;
-
+			// Hold comment for moderation
 			$this->database->log(
 				'moderation_decision',
 				sprintf(
@@ -151,12 +184,11 @@ class MoodModerator_Comment_Handler {
 					'action'     => 'hold',
 				)
 			);
+
+			return 0; // Hold for moderation
 		}
 
-		// Register hook to save meta after comment is inserted
-		add_action( 'comment_post', array( $this, 'save_sentiment_meta' ), 10, 2 );
-
-		return $comment_data;
+		return $approved; // Use WordPress default approval status
 	}
 
 	/**

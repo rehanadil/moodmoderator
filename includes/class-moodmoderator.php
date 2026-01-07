@@ -205,7 +205,10 @@ class MoodModerator {
 	 */
 	private function define_comment_hooks() {
 		// Main sentiment analysis hook (priority 11 to run after Akismet)
-		add_filter( 'preprocess_comment', array( $this->comment_handler, 'process_comment' ), 11, 2 );
+		add_filter( 'preprocess_comment', array( $this->comment_handler, 'process_comment' ), 11, 1 );
+
+		// Control comment approval based on sentiment
+		add_filter( 'pre_comment_approved', array( $this->comment_handler, 'filter_comment_approval' ), 10, 2 );
 
 		// Cache invalidation on comment edit
 		add_action( 'edit_comment', array( $this->comment_handler, 'invalidate_cache_on_edit' ), 10, 1 );
