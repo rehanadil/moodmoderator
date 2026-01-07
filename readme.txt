@@ -108,9 +108,6 @@ No. The API call happens during comment submission, and with WordPress's default
 1. Settings page with API configuration and strictness levels
 2. Comments table with tone badges
 3. Dashboard widget showing 30-day sentiment summary
-4. Post edit screen with sentiment analytics meta box
-5. Logs viewer for debugging
-6. Tone management for AI suggestions
 
 == Changelog ==
 
