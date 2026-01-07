@@ -66,7 +66,6 @@ class MoodModerator {
 	 */
 	public function __construct() {
 		$this->load_dependencies();
-		$this->set_locale();
 		$this->init_core_components();
 		$this->define_admin_hooks();
 		$this->define_comment_hooks();
@@ -95,29 +94,6 @@ class MoodModerator {
 			require_once MOODMODERATOR_PLUGIN_DIR . 'admin/class-moodmoderator-comments-table.php';
 			require_once MOODMODERATOR_PLUGIN_DIR . 'admin/class-moodmoderator-posts-table.php';
 		}
-	}
-
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 */
-	private function set_locale() {
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
-	}
-
-	/**
-	 * Load the plugin text domain for translation.
-	 *
-	 * @since 1.0.0
-	 */
-	public function load_plugin_textdomain() {
-		load_plugin_textdomain(
-			'moodmoderator',
-			false,
-			dirname( MOODMODERATOR_PLUGIN_BASENAME ) . '/languages/'
-		);
 	}
 
 	/**

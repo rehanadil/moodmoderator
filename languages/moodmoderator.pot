@@ -2,27 +2,22 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: MoodModerator – AI Comment Moderation & Tone Analysis 1.0.0\n"
+"Project-Id-Version: MoodModerator 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moodmoderator-wordpress-plugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-06T19:35:51+00:00\n"
+"POT-Creation-Date: 2026-01-07T10:58:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: moodmoderator\n"
 
 #. Plugin Name of the plugin
 #: moodmoderator.php
-msgid "MoodModerator – AI Comment Moderation & Tone Analysis"
-msgstr ""
-
-#. Plugin URI of the plugin
-#. Author URI of the plugin
-#: moodmoderator.php
-msgid "https://rehanadil.dev"
+#: admin/class-moodmoderator-settings.php:44
+msgid "MoodModerator"
 msgstr ""
 
 #. Description of the plugin
@@ -33,6 +28,11 @@ msgstr ""
 #. Author of the plugin
 #: moodmoderator.php
 msgid "Rehan Adil"
+msgstr ""
+
+#. Author URI of the plugin
+#: moodmoderator.php
+msgid "https://rehanadil.dev"
 msgstr ""
 
 #: admin/class-moodmoderator-admin.php:94
@@ -143,11 +143,11 @@ msgid "Not analyzed"
 msgstr ""
 
 #. translators: %s: confidence percentage
-#: admin/class-moodmoderator-comments-table.php:76
-msgid "Confidence: %.0f%%"
+#: admin/class-moodmoderator-comments-table.php:78
+msgid "Confidence: %s%%"
 msgstr ""
 
-#: admin/class-moodmoderator-comments-table.php:108
+#: admin/class-moodmoderator-comments-table.php:118
 msgid "All Tones"
 msgstr ""
 
@@ -174,16 +174,12 @@ msgid "No comments"
 msgstr ""
 
 #. translators: 1: number of comments analyzed, 2: average confidence percentage
-#: admin/class-moodmoderator-posts-table.php:77
-msgid "%1$d comments analyzed, %2$.0f%% avg confidence"
+#: admin/class-moodmoderator-posts-table.php:79
+msgid "%1$s comments analyzed, %2$s%% avg confidence"
 msgstr ""
 
 #: admin/class-moodmoderator-settings.php:43
 msgid "MoodModerator Settings"
-msgstr ""
-
-#: admin/class-moodmoderator-settings.php:44
-msgid "MoodModerator"
 msgstr ""
 
 #: admin/class-moodmoderator-settings.php:110
@@ -302,71 +298,71 @@ msgstr ""
 msgid "How long to cache sentiment analysis results (1-720 hours). Longer durations reduce API costs."
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:27
+#: admin/partials/admin-logs-display.php:44
 msgid "All Types"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:29
+#: admin/partials/admin-logs-display.php:46
 msgid "API Calls"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:32
+#: admin/partials/admin-logs-display.php:49
 msgid "API Errors"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:35
+#: admin/partials/admin-logs-display.php:52
 msgid "Moderation Decisions"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:38
+#: admin/partials/admin-logs-display.php:55
 msgid "Cache Hits"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:42
+#: admin/partials/admin-logs-display.php:59
 msgid "Start Date"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:43
+#: admin/partials/admin-logs-display.php:60
 msgid "End Date"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:45
+#: admin/partials/admin-logs-display.php:62
 msgid "Filter"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:47
+#: admin/partials/admin-logs-display.php:64
 msgid "Clear Filters"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:53
+#: admin/partials/admin-logs-display.php:70
 msgid "No logs found."
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:58
+#: admin/partials/admin-logs-display.php:75
 msgid "Date/Time"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:59
+#: admin/partials/admin-logs-display.php:76
 msgid "Type"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:60
+#: admin/partials/admin-logs-display.php:77
 msgid "Message"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:61
+#: admin/partials/admin-logs-display.php:78
 msgid "Comment"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:77
+#: admin/partials/admin-logs-display.php:94
 msgid "View Details"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:102
+#: admin/partials/admin-logs-display.php:124
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/admin-logs-display.php:103
+#: admin/partials/admin-logs-display.php:125
 msgid "&raquo;"
 msgstr ""
 
@@ -398,18 +394,18 @@ msgstr ""
 msgid "Rate Limit"
 msgstr ""
 
-#. translators: %1$d: calls made, %2$d: limit, %3$d: remaining
+#. translators: 1: calls made, 2: limit, 3: remaining
 #: admin/partials/admin-settings-display.php:69
-msgid "%1$d / %2$d API calls this hour (%3$d remaining)"
+msgid "%1$s / %2$s API calls this hour (%3$s remaining)"
 msgstr ""
 
 #: admin/partials/admin-settings-display.php:78
 msgid "Cached Comments"
 msgstr ""
 
-#. translators: %1$d: valid caches, %2$d: total, %3$d: expired
+#. translators: 1: valid caches, 2: total, 3: expired
 #: admin/partials/admin-settings-display.php:83
-msgid "%1$d valid / %2$d total (%3$d expired)"
+msgid "%1$s valid / %2$s total (%3$s expired)"
 msgstr ""
 
 #: admin/partials/admin-settings-display.php:92
@@ -540,15 +536,15 @@ msgid "Used cached sentiment"
 msgstr ""
 
 #. translators: 1: detected tone, 2: confidence score
-#: includes/class-moodmoderator-comment-handler.php:143
+#: includes/class-moodmoderator-comment-handler.php:176
 msgid "Comment held for moderation due to tone: %1$s (%2$.2f confidence)"
 msgstr ""
 
-#: includes/class-moodmoderator-comment-handler.php:310
+#: includes/class-moodmoderator-comment-handler.php:342
 msgid "Comment edited, cache cleared"
 msgstr ""
 
 #. translators: %s: detected tone
-#: includes/class-moodmoderator-comment-handler.php:369
+#: includes/class-moodmoderator-comment-handler.php:401
 msgid "Previously approved comment held after edit due to tone: %s"
 msgstr ""
