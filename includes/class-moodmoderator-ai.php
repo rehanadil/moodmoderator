@@ -67,7 +67,12 @@ class MoodModerator_AI {
 			$comment_text = mb_substr( $comment_text, 0, $max_length );
 			$this->database->log(
 				'truncation',
-				sprintf( __( 'Comment truncated from %d to %d characters', 'moodmoderator' ), $original_length, $max_length ),
+				sprintf(
+					/* translators: 1: original length, 2: truncated length */
+					__( 'Comment truncated from %1$d to %2$d characters', 'moodmoderator' ),
+					$original_length,
+					$max_length
+				),
 				null,
 				array( 'original_length' => $original_length, 'truncated_length' => $max_length )
 			);
@@ -100,7 +105,12 @@ class MoodModerator_AI {
 		// Log successful API call
 		$this->database->log(
 			'api_call',
-			sprintf( __( 'Sentiment analyzed: %s (%.2f)', 'moodmoderator' ), $result['tone'], $result['confidence'] ),
+			sprintf(
+				/* translators: 1: detected tone, 2: confidence score */
+				__( 'Sentiment analyzed: %1$s (%2$.2f)', 'moodmoderator' ),
+				$result['tone'],
+				$result['confidence']
+			),
 			null,
 			array(
 				'tone'       => $result['tone'],
@@ -126,11 +136,13 @@ class MoodModerator_AI {
 		$tones_list = implode( ', ', $predefined_tones );
 
 		$system_message = sprintf(
+			/* translators: %s: comma-separated list of preferred tone names */
 			__( 'You are a comment sentiment analyzer. Analyze the tone of the comment and classify it. Preferred tones: %s. If the tone does not fit any of these categories well, suggest a new appropriate tone name. Return your analysis in JSON format with the following structure: {"tone": "tone_name", "confidence": 0.95, "reasoning": "brief explanation", "is_new_tone": false}. The confidence should be a float between 0 and 1. Set is_new_tone to true only if you are suggesting a tone that is not in the preferred list.', 'moodmoderator' ),
 			$tones_list
 		);
 
 		$user_message = sprintf(
+			/* translators: %s: comment text */
 			__( 'Analyze the tone of this comment:\n\n"%s"', 'moodmoderator' ),
 			$comment_text
 		);
@@ -138,6 +150,7 @@ class MoodModerator_AI {
 		// Add context if provided
 		if ( ! empty( $context['post_title'] ) ) {
 			$user_message .= sprintf(
+				/* translators: %s: post title */
 				__( '\n\nContext: This comment is on a post titled "%s".', 'moodmoderator' ),
 				$context['post_title']
 			);
@@ -227,7 +240,12 @@ class MoodModerator_AI {
 			return array(
 				'tone'       => 'Unknown',
 				'confidence' => 0.0,
-				'reasoning'  => sprintf( __( 'API error: HTTP %d - %s', 'moodmoderator' ), $response_code, $body ),
+				'reasoning'  => sprintf(
+					/* translators: 1: HTTP status code, 2: response body */
+					__( 'API error: HTTP %1$d - %2$s', 'moodmoderator' ),
+					$response_code,
+					$body
+				),
 			);
 		}
 

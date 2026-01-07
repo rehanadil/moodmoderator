@@ -7,6 +7,8 @@
 (function() {
     'use strict';
 
+    const strings = (window.moodModeratorData && moodModeratorData.strings) ? moodModeratorData.strings : {};
+
     /**
      * Make AJAX request
      */
@@ -37,7 +39,7 @@
         })
         .catch(error => {
             console.error('AJAX Error:', error);
-            errorCallback({ data: { message: 'An error occurred. Please try again.' } });
+            errorCallback({ data: { message: strings.errorOccurred || 'An error occurred. Please try again.' } });
         });
     }
 
@@ -80,7 +82,7 @@
             }
 
             button.disabled = true;
-            button.textContent = 'Processing...';
+            button.textContent = strings.processing || 'Processing...';
 
             makeAjaxRequest(
                 'moodmoderator_approve_tone',
@@ -89,7 +91,7 @@
                     row.classList.add('approved');
                     const approvedSpan = document.createElement('span');
                     approvedSpan.style.color = 'green';
-                    approvedSpan.textContent = '✓ Approved';
+                    approvedSpan.textContent = strings.approvedLabel || 'Approved';
                     button.replaceWith(approvedSpan);
 
                     const rejectButton = row.querySelector('.moodmoderator-reject-tone');
@@ -100,9 +102,9 @@
                     showMessage('success', response.data.message);
                 },
                 function(response) {
-                    alert(response.data.message || 'Failed to approve tone');
+                    alert(response.data.message || strings.approveFailed || 'Failed to approve tone');
                     button.disabled = false;
-                    button.textContent = 'Approve';
+                    button.textContent = strings.approve || 'Approve';
                 }
             );
         }
@@ -124,7 +126,7 @@
             }
 
             button.disabled = true;
-            button.textContent = 'Processing...';
+            button.textContent = strings.processing || 'Processing...';
 
             makeAjaxRequest(
                 'moodmoderator_reject_tone',
@@ -133,7 +135,7 @@
                     row.classList.add('rejected');
                     const rejectedSpan = document.createElement('span');
                     rejectedSpan.style.color = 'red';
-                    rejectedSpan.textContent = '✗ Rejected';
+                    rejectedSpan.textContent = strings.rejectedLabel || 'Rejected';
                     button.replaceWith(rejectedSpan);
 
                     const approveButton = row.querySelector('.moodmoderator-approve-tone');
@@ -144,9 +146,9 @@
                     showMessage('success', response.data.message);
                 },
                 function(response) {
-                    alert(response.data.message || 'Failed to reject tone');
+                    alert(response.data.message || strings.rejectFailed || 'Failed to reject tone');
                     button.disabled = false;
-                    button.textContent = 'Reject';
+                    button.textContent = strings.reject || 'Reject';
                 }
             );
         }
@@ -165,7 +167,7 @@
 
             const button = e.target;
             button.disabled = true;
-            button.textContent = 'Clearing...';
+            button.textContent = strings.clearing || 'Clearing...';
 
             makeAjaxRequest(
                 'moodmoderator_clear_cache',
@@ -175,9 +177,9 @@
                     location.reload();
                 },
                 function(response) {
-                    alert(response.data.message || 'Failed to clear cache');
+                    alert(response.data.message || strings.clearFailed || 'Failed to clear cache');
                     button.disabled = false;
-                    button.textContent = 'Clear All Caches';
+                    button.textContent = strings.clearAllCaches || 'Clear All Caches';
                 }
             );
         }

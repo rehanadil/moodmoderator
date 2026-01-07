@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name:       MoodModerator
- * Plugin URI:        https://github.com/yourusername/moodmoderator
+ * Plugin Name:       MoodModerator – AI Comment Moderation & Tone Analysis
+ * Plugin URI:        https://rehanadil.dev
  * Description:       AI-powered comment sentiment analysis using OpenAI. Automatically moderates negative comments and provides comprehensive sentiment analytics.
  * Version:           1.0.0
- * Author:            Your Name
- * Author URI:        https://yourwebsite.com
+ * Author:            Rehan Adil
+ * Author URI:        https://rehanadil.dev
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       moodmoderator

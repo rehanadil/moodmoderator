@@ -138,7 +138,12 @@ class MoodModerator_Comment_Handler {
 
 			$this->database->log(
 				'moderation_decision',
-				sprintf( __( 'Comment held for moderation due to tone: %s (%.2f confidence)', 'moodmoderator' ), $sentiment['tone'], $sentiment['confidence'] ),
+				sprintf(
+					/* translators: 1: detected tone, 2: confidence score */
+					__( 'Comment held for moderation due to tone: %1$s (%2$.2f confidence)', 'moodmoderator' ),
+					$sentiment['tone'],
+					$sentiment['confidence']
+				),
 				null,
 				array(
 					'tone'       => $sentiment['tone'],
@@ -359,7 +364,11 @@ class MoodModerator_Comment_Handler {
 
 			$this->database->log(
 				'moderation_decision',
-				sprintf( __( 'Previously approved comment held after edit due to tone: %s', 'moodmoderator' ), $sentiment['tone'] ),
+				sprintf(
+					/* translators: %s: detected tone */
+					__( 'Previously approved comment held after edit due to tone: %s', 'moodmoderator' ),
+					$sentiment['tone']
+				),
 				$comment->comment_ID,
 				array(
 					'tone'       => $sentiment['tone'],

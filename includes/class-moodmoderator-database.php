@@ -42,6 +42,7 @@ class MoodModerator_Database {
 			}
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result = $wpdb->insert(
 			$table_name,
 			array(
@@ -79,55 +80,52 @@ class MoodModerator_Database {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'moodmoderator_logs';
 
-		$where = array( '1=1' );
-		$values = array();
+		$query = "SELECT * FROM {$table_name} WHERE 1=%d";
+		$values = array( 1 );
 
 		// Build WHERE clause
 		if ( ! empty( $filters['log_type'] ) ) {
-			$where[] = 'log_type = %s';
+			$query .= ' AND log_type = %s';
 			$values[] = $filters['log_type'];
 		}
 
 		if ( ! empty( $filters['comment_id'] ) ) {
-			$where[] = 'comment_id = %d';
+			$query .= ' AND comment_id = %d';
 			$values[] = intval( $filters['comment_id'] );
 		}
 
 		if ( ! empty( $filters['post_id'] ) ) {
-			$where[] = 'post_id = %d';
+			$query .= ' AND post_id = %d';
 			$values[] = intval( $filters['post_id'] );
 		}
 
 		if ( ! empty( $filters['start_date'] ) ) {
-			$where[] = 'created_at >= %s';
+			$query .= ' AND created_at >= %s';
 			$values[] = $filters['start_date'] . ' 00:00:00';
 		}
 
 		if ( ! empty( $filters['end_date'] ) ) {
-			$where[] = 'created_at <= %s';
+			$query .= ' AND created_at <= %s';
 			$values[] = $filters['end_date'] . ' 23:59:59';
 		}
 
-		$where_clause = implode( ' AND ', $where );
-
-		// Build query
-		$query = "SELECT * FROM $table_name WHERE $where_clause ORDER BY created_at DESC";
+		$query .= ' ORDER BY created_at DESC';
 
 		// Add LIMIT and OFFSET
 		if ( isset( $filters['limit'] ) ) {
-			$query .= $wpdb->prepare( ' LIMIT %d', intval( $filters['limit'] ) );
+			$query .= ' LIMIT %d';
+			$values[] = intval( $filters['limit'] );
 		}
 
 		if ( isset( $filters['offset'] ) ) {
-			$query .= $wpdb->prepare( ' OFFSET %d', intval( $filters['offset'] ) );
+			$query .= ' OFFSET %d';
+			$values[] = intval( $filters['offset'] );
 		}
 
-		// Prepare and execute query
-		if ( ! empty( $values ) ) {
-			$query = $wpdb->prepare( $query, $values );
-		}
-
-		return $wpdb->get_results( $query );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+		$prepared = $wpdb->prepare( $query, $values );
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->get_results( $prepared );
 	}
 
 	/**
@@ -141,43 +139,39 @@ class MoodModerator_Database {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'moodmoderator_logs';
 
-		$where = array( '1=1' );
-		$values = array();
+		$query = "SELECT COUNT(*) FROM {$table_name} WHERE 1=%d";
+		$values = array( 1 );
 
 		// Build WHERE clause (same as get_logs)
 		if ( ! empty( $filters['log_type'] ) ) {
-			$where[] = 'log_type = %s';
+			$query .= ' AND log_type = %s';
 			$values[] = $filters['log_type'];
 		}
 
 		if ( ! empty( $filters['comment_id'] ) ) {
-			$where[] = 'comment_id = %d';
+			$query .= ' AND comment_id = %d';
 			$values[] = intval( $filters['comment_id'] );
 		}
 
 		if ( ! empty( $filters['post_id'] ) ) {
-			$where[] = 'post_id = %d';
+			$query .= ' AND post_id = %d';
 			$values[] = intval( $filters['post_id'] );
 		}
 
 		if ( ! empty( $filters['start_date'] ) ) {
-			$where[] = 'created_at >= %s';
+			$query .= ' AND created_at >= %s';
 			$values[] = $filters['start_date'] . ' 00:00:00';
 		}
 
 		if ( ! empty( $filters['end_date'] ) ) {
-			$where[] = 'created_at <= %s';
+			$query .= ' AND created_at <= %s';
 			$values[] = $filters['end_date'] . ' 23:59:59';
 		}
 
-		$where_clause = implode( ' AND ', $where );
-		$query = "SELECT COUNT(*) FROM $table_name WHERE $where_clause";
-
-		if ( ! empty( $values ) ) {
-			$query = $wpdb->prepare( $query, $values );
-		}
-
-		return intval( $wpdb->get_var( $query ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+		$prepared = $wpdb->prepare( $query, $values );
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return intval( $wpdb->get_var( $prepared ) );
 	}
 
 	/**
@@ -327,8 +321,9 @@ class MoodModerator_Database {
 		global $wpdb;
 
 		// Get all comments from the last N days with sentiment data
-		$date_threshold = date( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$date_threshold = wp_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) - ( $days * DAY_IN_SECONDS ) );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$comments = $wpdb->get_results( $wpdb->prepare(
 			"SELECT c.comment_ID, c.comment_post_ID, c.comment_author, c.comment_content, c.comment_approved
 			FROM {$wpdb->comments} c
@@ -407,13 +402,18 @@ class MoodModerator_Database {
 		$tone_name = sanitize_text_field( $tone_name );
 
 		// Check if tone already exists
-		$existing = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE tone_name = %s",
-			$tone_name
-		) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$existing = $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_name} WHERE tone_name = %s",
+				$tone_name
+			)
+		);
 
 		if ( $existing ) {
 			// Update frequency and last_seen
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->update(
 				$table_name,
 				array(
@@ -428,6 +428,7 @@ class MoodModerator_Database {
 			return $existing->id;
 		} else {
 			// Insert new suggestion
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$result = $wpdb->insert(
 				$table_name,
 				array(
@@ -456,10 +457,12 @@ class MoodModerator_Database {
 		$table_name = $wpdb->prefix . 'moodmoderator_tone_suggestions';
 
 		$query = $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE status = %s ORDER BY frequency DESC, last_seen DESC",
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT * FROM {$table_name} WHERE status = %s ORDER BY frequency DESC, last_seen DESC",
 			$status
 		);
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $wpdb->get_results( $query );
 	}
 
@@ -475,6 +478,7 @@ class MoodModerator_Database {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'moodmoderator_tone_suggestions';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->update(
 			$table_name,
 			array( 'status' => sanitize_text_field( $status ) ),
@@ -508,11 +512,15 @@ class MoodModerator_Database {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'moodmoderator_logs';
 
-		$date_threshold = date( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$date_threshold = wp_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) - ( $days * DAY_IN_SECONDS ) );
 
-		return $wpdb->query( $wpdb->prepare(
-			"DELETE FROM $table_name WHERE created_at < %s",
-			$date_threshold
-		) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"DELETE FROM {$table_name} WHERE created_at < %s",
+				$date_threshold
+			)
+		);
 	}
 }

@@ -164,6 +164,13 @@
     border-left: 4px solid #2271b1;
 }
 
+.moodmoderator-tagline {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: #1d2327;
+}
+
 #moodmoderator_custom_tones_field label {
     display: block;
     margin: 5px 0;

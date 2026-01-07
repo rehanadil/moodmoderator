@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build release archive
+        run: |
+          TAG_NAME="${GITHUB_REF_NAME}"
+          ZIP_NAME="moodmoderator-${TAG_NAME}.zip"
+          git archive --format=zip --prefix=moodmoderator/ -o "${ZIP_NAME}" "${TAG_NAME}"
+          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
+        id: build_zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.build_zip.outputs.zip_name }}
+          generate_release_notes: true

@@ -77,8 +77,18 @@ class MoodModerator_Logs {
 	 */
 	public function get_filtered_logs() {
 		$per_page = 50;
-		$page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
+		$nonce = isset( $_GET['moodmoderator_logs_nonce'] )
+			? sanitize_text_field( wp_unslash( $_GET['moodmoderator_logs_nonce'] ) )
+			: '';
+		$nonce_valid = $nonce && wp_verify_nonce( $nonce, 'moodmoderator_filter_logs' );
+
+		$page = 1;
+		if ( $nonce_valid && isset( $_GET['paged'] ) ) {
+			$page = max( 1, intval( wp_unslash( $_GET['paged'] ) ) );
+		}
 		$offset = ( $page - 1 ) * $per_page;
+
+		$has_filters = $nonce_valid && ( ! empty( $_GET['log_type'] ) || ! empty( $_GET['start_date'] ) || ! empty( $_GET['end_date'] ) );
 
 		$filters = array(
 			'limit'  => $per_page,
@@ -86,16 +96,16 @@ class MoodModerator_Logs {
 		);
 
 		// Apply filters from GET params
-		if ( ! empty( $_GET['log_type'] ) ) {
-			$filters['log_type'] = sanitize_text_field( $_GET['log_type'] );
+		if ( $has_filters && ! empty( $_GET['log_type'] ) ) {
+			$filters['log_type'] = sanitize_text_field( wp_unslash( $_GET['log_type'] ) );
 		}
 
-		if ( ! empty( $_GET['start_date'] ) ) {
-			$filters['start_date'] = sanitize_text_field( $_GET['start_date'] );
+		if ( $has_filters && ! empty( $_GET['start_date'] ) ) {
+			$filters['start_date'] = sanitize_text_field( wp_unslash( $_GET['start_date'] ) );
 		}
 
-		if ( ! empty( $_GET['end_date'] ) ) {
-			$filters['end_date'] = sanitize_text_field( $_GET['end_date'] );
+		if ( $has_filters && ! empty( $_GET['end_date'] ) ) {
+			$filters['end_date'] = sanitize_text_field( wp_unslash( $_GET['end_date'] ) );
 		}
 
 		$logs = $this->database->get_logs( $filters );

@@ -94,6 +94,17 @@ class MoodModerator_Admin {
 						'confirmClearCache' => __( 'Are you sure you want to clear all sentiment caches? This will re-analyze comments on next view.', 'moodmoderator' ),
 						'success'           => __( 'Success', 'moodmoderator' ),
 						'error'             => __( 'Error', 'moodmoderator' ),
+						'processing'        => __( 'Processing...', 'moodmoderator' ),
+						'approve'           => __( 'Approve', 'moodmoderator' ),
+						'reject'            => __( 'Reject', 'moodmoderator' ),
+						'approvedLabel'     => __( 'Approved', 'moodmoderator' ),
+						'rejectedLabel'     => __( 'Rejected', 'moodmoderator' ),
+						'clearing'          => __( 'Clearing...', 'moodmoderator' ),
+						'clearAllCaches'    => __( 'Clear All Caches', 'moodmoderator' ),
+						'errorOccurred'     => __( 'An error occurred. Please try again.', 'moodmoderator' ),
+						'approveFailed'     => __( 'Failed to approve tone', 'moodmoderator' ),
+						'rejectFailed'      => __( 'Failed to reject tone', 'moodmoderator' ),
+						'clearFailed'       => __( 'Failed to clear cache', 'moodmoderator' ),
 					),
 				)
 			);
@@ -116,7 +127,7 @@ class MoodModerator_Admin {
 					<?php
 					printf(
 						/* translators: %s: Settings page URL */
-						__( '<strong>MoodModerator:</strong> Please configure your OpenAI API key in <a href="%s">Settings &gt; MoodModerator</a>.', 'moodmoderator' ),
+						wp_kses_post( __( '<strong>MoodModerator:</strong> Please configure your OpenAI API key in <a href="%s">Settings &gt; MoodModerator</a>.', 'moodmoderator' ) ),
 						esc_url( admin_url( 'options-general.php?page=moodmoderator' ) )
 					);
 					?>
@@ -226,7 +237,11 @@ class MoodModerator_Admin {
 
 		$this->database->log(
 			'cache_clear',
-			sprintf( __( 'Admin cleared all sentiment caches (%d comments affected)', 'moodmoderator' ), $count )
+			sprintf(
+				/* translators: %d: number of comments affected */
+				__( 'Admin cleared all sentiment caches (%d comments affected)', 'moodmoderator' ),
+				$count
+			)
 		);
 
 		wp_send_json_success( array(

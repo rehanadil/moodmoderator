@@ -63,17 +63,26 @@ class MoodModerator_Posts_Table {
 			return;
 		}
 
-		$dominant_tone = $sentiment_data['dominant_tone'];
-		$avg_confidence = $sentiment_data['avg_confidence'];
-		$total_comments = $sentiment_data['total_comments'];
+		$dominant_tone   = $sentiment_data['dominant_tone'];
+		$avg_confidence  = $sentiment_data['avg_confidence'];
+		$total_comments  = $sentiment_data['total_comments'];
+		$comments_count  = number_format_i18n( $total_comments );
+		$confidence_percent = number_format_i18n( $avg_confidence * 100, 0 );
 		$tone_class = 'moodmoderator-tone-' . strtolower( sanitize_html_class( $dominant_tone ) );
 
 		printf(
-			'<span class="moodmoderator-tone-badge %s" title="%s">%s <span class="count">(%d)</span></span>',
+			'<span class="moodmoderator-tone-badge %s" title="%s">%s <span class="count">(%s)</span></span>',
 			esc_attr( $tone_class ),
-			esc_attr( sprintf( __( '%d comments analyzed, %.0f%% avg confidence', 'moodmoderator' ), $total_comments, $avg_confidence * 100 ) ),
+			esc_attr(
+				sprintf(
+					/* translators: 1: number of comments analyzed, 2: average confidence percentage */
+					__( '%1$s comments analyzed, %2$s%% avg confidence', 'moodmoderator' ),
+					$comments_count,
+					$confidence_percent
+				)
+			),
 			esc_html( $dominant_tone ),
-			$total_comments
+			esc_html( $comments_count )
 		);
 	}
 

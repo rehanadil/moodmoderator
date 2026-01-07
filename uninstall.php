@@ -16,8 +16,10 @@ global $wpdb;
 $logs_table = $wpdb->prefix . 'moodmoderator_logs';
 $suggestions_table = $wpdb->prefix . 'moodmoderator_tone_suggestions';
 
-$wpdb->query( "DROP TABLE IF EXISTS $logs_table" );
-$wpdb->query( "DROP TABLE IF EXISTS $suggestions_table" );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$wpdb->query( "DROP TABLE IF EXISTS {$logs_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$wpdb->query( "DROP TABLE IF EXISTS {$suggestions_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 // Delete plugin options
 delete_option( 'moodmoderator_api_key' );
@@ -29,6 +31,7 @@ delete_option( 'moodmoderator_cache_duration' );
 delete_option( 'moodmoderator_version' );
 
 // Delete all comment meta
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query( "DELETE FROM {$wpdb->commentmeta} WHERE meta_key LIKE 'moodmoderator_%'" );
 
 // Delete transients

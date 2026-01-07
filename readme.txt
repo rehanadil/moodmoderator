@@ -1,5 +1,5 @@
-=== MoodModerator ===
-Contributors: yourusername
+=== MoodModerator – AI Comment Moderation & Tone Analysis ===
+Contributors: rehanadil
 Tags: comments, moderation, ai, sentiment, openai
 Requires at least: 6.0
 Tested up to: 6.4
@@ -44,6 +44,18 @@ MoodModerator is a powerful WordPress plugin that uses artificial intelligence t
 * WordPress 6.0 or higher
 * PHP 7.4 or higher
 * OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
+== Third-Party Services ==
+
+This plugin connects to OpenAI to analyze comment sentiment.
+
+Service: OpenAI API
+- Purpose: Analyze comment tone and return a sentiment classification.
+- Data sent: Comment text and (optionally) the post title for context.
+- When sent: On comment submission or when comments are re-analyzed.
+- Service URL: https://api.openai.com/v1/chat/completions
+- Terms of Service: https://openai.com/policies/terms-of-use
+- Privacy Policy: https://openai.com/policies/privacy-policy
 
 == Installation ==
 
@@ -125,8 +137,8 @@ Initial release of MoodModerator. Requires PHP 7.4+ and WordPress 6.0+.
 
 MoodModerator sends comment text to OpenAI's API for sentiment analysis. Please review [OpenAI's privacy policy](https://openai.com/policies/privacy-policy) to understand how they handle data. Comment text is only sent for analysis purposes and is not stored by OpenAI beyond their standard retention policies.
 
-The plugin does not collect any user data beyond what's necessary for comment analysis (comment text and author email for caching purposes).
+The plugin does not collect any user data beyond what's necessary for comment analysis (comment text and optional post title for context). Site owners should disclose this third-party processing in their privacy policy.
 
 == Support ==
 
-For support, feature requests, or bug reports, please visit the [plugin support forum](https://wordpress.org/support/plugin/moodmoderator/) or [GitHub repository](https://github.com/yourusername/moodmoderator).
+For support, feature requests, or bug reports, please visit the [plugin support forum](https://wordpress.org/support/plugin/moodmoderator/) or https://rehanadil.dev.

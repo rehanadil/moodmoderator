@@ -109,12 +109,19 @@ class MoodModerator_Cache {
 	public function invalidate_all_caches() {
 		global $wpdb;
 
-		// Get all comment IDs with sentiment data
-		$comment_ids = $wpdb->get_col(
-			"SELECT DISTINCT comment_id
-			FROM {$wpdb->commentmeta}
-			WHERE meta_key = 'moodmoderator_tone'"
-		);
+		$cache_key = 'moodmoderator_cache_comment_ids';
+		$comment_ids = wp_cache_get( $cache_key, 'moodmoderator' );
+
+		if ( false === $comment_ids ) {
+			// Get all comment IDs with sentiment data
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$comment_ids = $wpdb->get_col(
+				"SELECT DISTINCT comment_id
+				FROM {$wpdb->commentmeta}
+				WHERE meta_key = 'moodmoderator_tone'"
+			);
+			wp_cache_set( $cache_key, $comment_ids, 'moodmoderator', HOUR_IN_SECONDS );
+		}
 
 		$count = 0;
 		foreach ( $comment_ids as $comment_id ) {
@@ -163,12 +170,19 @@ class MoodModerator_Cache {
 	public function get_cache_stats() {
 		global $wpdb;
 
-		// Get all comments with sentiment data
-		$cached_comments = $wpdb->get_results(
-			"SELECT comment_id, meta_value as analyzed_at
-			FROM {$wpdb->commentmeta}
-			WHERE meta_key = 'moodmoderator_analyzed_at'"
-		);
+		$cache_key = 'moodmoderator_cache_stats';
+		$cached_comments = wp_cache_get( $cache_key, 'moodmoderator' );
+
+		if ( false === $cached_comments ) {
+			// Get all comments with sentiment data
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$cached_comments = $wpdb->get_results(
+				"SELECT comment_id, meta_value as analyzed_at
+				FROM {$wpdb->commentmeta}
+				WHERE meta_key = 'moodmoderator_analyzed_at'"
+			);
+			wp_cache_set( $cache_key, $cached_comments, 'moodmoderator', HOUR_IN_SECONDS );
+		}
 
 		$total_cached = count( $cached_comments );
 		$valid_caches = 0;

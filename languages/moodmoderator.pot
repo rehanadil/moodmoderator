@@ -1,0 +1,554 @@
+# Copyright (C) 2026 Rehan Adil
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: MoodModerator – AI Comment Moderation & Tone Analysis 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moodmoderator-wordpress-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-01-06T19:35:51+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: moodmoderator\n"
+
+#. Plugin Name of the plugin
+#: moodmoderator.php
+msgid "MoodModerator – AI Comment Moderation & Tone Analysis"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: moodmoderator.php
+msgid "https://rehanadil.dev"
+msgstr ""
+
+#. Description of the plugin
+#: moodmoderator.php
+msgid "AI-powered comment sentiment analysis using OpenAI. Automatically moderates negative comments and provides comprehensive sentiment analytics."
+msgstr ""
+
+#. Author of the plugin
+#: moodmoderator.php
+msgid "Rehan Adil"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:94
+msgid "Are you sure you want to clear all sentiment caches? This will re-analyze comments on next view."
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:95
+msgid "Success"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:96
+msgid "Error"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:97
+msgid "Processing..."
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:98
+#: admin/class-moodmoderator-settings.php:244
+msgid "Approve"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:99
+#: admin/class-moodmoderator-settings.php:245
+msgid "Reject"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:100
+msgid "Approved"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:101
+msgid "Rejected"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:102
+msgid "Clearing..."
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:103
+#: admin/partials/admin-settings-display.php:103
+msgid "Clear All Caches"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:104
+msgid "An error occurred. Please try again."
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:105
+#: admin/class-moodmoderator-admin.php:190
+msgid "Failed to approve tone"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:106
+#: admin/class-moodmoderator-admin.php:218
+msgid "Failed to reject tone"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:107
+msgid "Failed to clear cache"
+msgstr ""
+
+#. translators: %s: Settings page URL
+#: admin/class-moodmoderator-admin.php:130
+msgid "<strong>MoodModerator:</strong> Please configure your OpenAI API key in <a href=\"%s\">Settings &gt; MoodModerator</a>."
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:148
+msgid "Comment Sentiment Analytics"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:176
+#: admin/class-moodmoderator-admin.php:204
+#: admin/class-moodmoderator-admin.php:232
+msgid "Unauthorized"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:182
+#: admin/class-moodmoderator-admin.php:210
+msgid "Invalid suggestion ID"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:188
+msgid "Tone approved"
+msgstr ""
+
+#: admin/class-moodmoderator-admin.php:216
+msgid "Tone rejected"
+msgstr ""
+
+#. translators: %d: number of comments affected
+#: admin/class-moodmoderator-admin.php:242
+msgid "Admin cleared all sentiment caches (%d comments affected)"
+msgstr ""
+
+#. translators: %d: Number of caches cleared
+#: admin/class-moodmoderator-admin.php:250
+msgid "Successfully cleared %d sentiment caches"
+msgstr ""
+
+#: admin/class-moodmoderator-comments-table.php:43
+msgid "Tone"
+msgstr ""
+
+#: admin/class-moodmoderator-comments-table.php:62
+msgid "Not analyzed"
+msgstr ""
+
+#. translators: %s: confidence percentage
+#: admin/class-moodmoderator-comments-table.php:76
+msgid "Confidence: %.0f%%"
+msgstr ""
+
+#: admin/class-moodmoderator-comments-table.php:108
+msgid "All Tones"
+msgstr ""
+
+#: admin/class-moodmoderator-dashboard-widget.php:43
+msgid "Comment Sentiment Summary (30 Days)"
+msgstr ""
+
+#: admin/class-moodmoderator-logs.php:43
+#: admin/class-moodmoderator-logs.php:44
+msgid "MoodModerator Logs"
+msgstr ""
+
+#: admin/class-moodmoderator-logs.php:58
+#: admin/class-moodmoderator-settings.php:185
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: admin/class-moodmoderator-posts-table.php:43
+msgid "Avg Sentiment"
+msgstr ""
+
+#: admin/class-moodmoderator-posts-table.php:62
+msgid "No comments"
+msgstr ""
+
+#. translators: 1: number of comments analyzed, 2: average confidence percentage
+#: admin/class-moodmoderator-posts-table.php:77
+msgid "%1$d comments analyzed, %2$.0f%% avg confidence"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:43
+msgid "MoodModerator Settings"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:44
+msgid "MoodModerator"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:110
+msgid "OpenAI API Configuration"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:117
+msgid "Moderation Settings"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:124
+msgid "Advanced Settings"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:131
+msgid "Tone Management"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:139
+msgid "OpenAI API Key"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:147
+msgid "Strictness Level"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:155
+msgid "Custom Tones to Hold"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:163
+msgid "Enable Logging"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:171
+msgid "Cache Duration (hours)"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:197
+msgid "Configure your OpenAI API credentials for sentiment analysis."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:206
+msgid "Control how aggressively comments are moderated based on sentiment."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:215
+msgid "Advanced performance and debugging options."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:227
+msgid "No pending tone suggestions at this time."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:229
+msgid "The AI has suggested the following new tones. Approve them to make them available for custom strictness settings."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:232
+msgid "Tone Name"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:233
+msgid "Frequency"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:234
+msgid "Last Seen"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:235
+msgid "Actions"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:271
+msgid "Your OpenAI API key. Get one at"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:274
+msgid "API key is configured."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:290
+msgid "Low - Hold only Toxic and Angry comments"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:293
+msgid "Medium - Hold Toxic, Angry, and Sarcastic comments (Recommended)"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:296
+msgid "High - Hold all except Friendly, Questioning, and Neutral"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:299
+msgid "Custom - Choose specific tones below"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:303
+msgid "Controls which tone categories trigger automatic comment moderation."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:331
+msgid "Select specific tones to hold for moderation when using Custom strictness level."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:349
+msgid "Enable logging of API calls and moderation decisions"
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:352
+msgid "Logs are useful for debugging but may use additional database space."
+msgstr ""
+
+#: admin/class-moodmoderator-settings.php:373
+msgid "How long to cache sentiment analysis results (1-720 hours). Longer durations reduce API costs."
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:27
+msgid "All Types"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:29
+msgid "API Calls"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:32
+msgid "API Errors"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:35
+msgid "Moderation Decisions"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:38
+msgid "Cache Hits"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:42
+msgid "Start Date"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:43
+msgid "End Date"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:45
+msgid "Filter"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:47
+msgid "Clear Filters"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:53
+msgid "No logs found."
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:58
+msgid "Date/Time"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:59
+msgid "Type"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:60
+msgid "Message"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:61
+msgid "Comment"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:77
+msgid "View Details"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:102
+msgid "&laquo;"
+msgstr ""
+
+#: admin/partials/admin-logs-display.php:103
+msgid "&raquo;"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:30
+msgid "AI Comment Moderation & Tone Analysis"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:33
+msgid "Configure MoodModerator to automatically analyze comment sentiment using OpenAI and moderate negative comments."
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:47
+msgid "System Status"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:52
+msgid "API Status"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:56
+msgid "Configured"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:59
+msgid "Not configured"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:64
+msgid "Rate Limit"
+msgstr ""
+
+#. translators: %1$d: calls made, %2$d: limit, %3$d: remaining
+#: admin/partials/admin-settings-display.php:69
+msgid "%1$d / %2$d API calls this hour (%3$d remaining)"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:78
+msgid "Cached Comments"
+msgstr ""
+
+#. translators: %1$d: valid caches, %2$d: total, %3$d: expired
+#: admin/partials/admin-settings-display.php:83
+msgid "%1$d valid / %2$d total (%3$d expired)"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:92
+msgid "Plugin Version"
+msgstr ""
+
+#: admin/partials/admin-settings-display.php:100
+msgid "View Logs"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:21
+msgid "No comments analyzed in the last 30 days."
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:26
+msgid "Analyzed"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:30
+msgid "Held for Moderation"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:34
+msgid "Tone Breakdown"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:56
+msgid "Recent Analyzed Comments"
+msgstr ""
+
+#. translators: %s: Author name
+#: admin/partials/dashboard-widget-display.php:71
+msgid "by %s"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:83
+msgid "View All Comments"
+msgstr ""
+
+#: admin/partials/dashboard-widget-display.php:86
+msgid "Settings"
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:21
+msgid "No comments have been analyzed for this post yet."
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:25
+msgid "Total Comments Analyzed:"
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:29
+msgid "Average Confidence:"
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:33
+msgid "Dominant Tone:"
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:41
+msgid "Tone Distribution"
+msgstr ""
+
+#: admin/partials/post-analytics-display.php:65
+msgid "View Comments"
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:57
+msgid "API key not configured"
+msgstr ""
+
+#. translators: 1: original length, 2: truncated length
+#: includes/class-moodmoderator-ai.php:72
+msgid "Comment truncated from %1$d to %2$d characters"
+msgstr ""
+
+#. translators: 1: detected tone, 2: confidence score
+#: includes/class-moodmoderator-ai.php:110
+msgid "Sentiment analyzed: %1$s (%2$.2f)"
+msgstr ""
+
+#. translators: %s: comma-separated list of preferred tone names
+#: includes/class-moodmoderator-ai.php:140
+msgid "You are a comment sentiment analyzer. Analyze the tone of the comment and classify it. Preferred tones: %s. If the tone does not fit any of these categories well, suggest a new appropriate tone name. Return your analysis in JSON format with the following structure: {\"tone\": \"tone_name\", \"confidence\": 0.95, \"reasoning\": \"brief explanation\", \"is_new_tone\": false}. The confidence should be a float between 0 and 1. Set is_new_tone to true only if you are suggesting a tone that is not in the preferred list."
+msgstr ""
+
+#. translators: %s: comment text
+#: includes/class-moodmoderator-ai.php:146
+msgid "Analyze the tone of this comment:\\n\\n\"%s\""
+msgstr ""
+
+#. translators: %s: post title
+#: includes/class-moodmoderator-ai.php:154
+msgid "\\n\\nContext: This comment is on a post titled \"%s\"."
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:183
+msgid "OpenAI API key not configured"
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:188
+msgid "API rate limit exceeded"
+msgstr ""
+
+#. translators: 1: HTTP status code, 2: response body
+#: includes/class-moodmoderator-ai.php:245
+msgid "API error: HTTP %1$d - %2$s"
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:259
+msgid "Invalid JSON response"
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:268
+msgid "Unexpected response structure"
+msgstr ""
+
+#: includes/class-moodmoderator-ai.php:278
+msgid "Missing tone in response"
+msgstr ""
+
+#: includes/class-moodmoderator-comment-handler.php:86
+msgid "No API key configured"
+msgstr ""
+
+#: includes/class-moodmoderator-comment-handler.php:104
+msgid "Used cached sentiment"
+msgstr ""
+
+#. translators: 1: detected tone, 2: confidence score
+#: includes/class-moodmoderator-comment-handler.php:143
+msgid "Comment held for moderation due to tone: %1$s (%2$.2f confidence)"
+msgstr ""
+
+#: includes/class-moodmoderator-comment-handler.php:310
+msgid "Comment edited, cache cleared"
+msgstr ""
+
+#. translators: %s: detected tone
+#: includes/class-moodmoderator-comment-handler.php:369
+msgid "Previously approved comment held after edit due to tone: %s"
+msgstr ""

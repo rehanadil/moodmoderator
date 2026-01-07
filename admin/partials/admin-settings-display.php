@@ -26,6 +26,9 @@ $cache_stats = $cache->get_cache_stats();
 	<?php settings_errors(); ?>
 
 	<div class="moodmoderator-settings-header">
+		<p class="moodmoderator-tagline">
+			<?php esc_html_e( 'AI Comment Moderation & Tone Analysis', 'moodmoderator' ); ?>
+		</p>
 		<p class="description">
 			<?php esc_html_e( 'Configure MoodModerator to automatically analyze comment sentiment using OpenAI and moderate negative comments.', 'moodmoderator' ); ?>
 		</p>
@@ -62,11 +65,11 @@ $cache_stats = $cache->get_cache_stats();
 				<td>
 					<?php
 					printf(
-						/* translators: %1$d: calls made, %2$d: limit, %3$d: remaining */
-						esc_html__( '%1$d / %2$d API calls this hour (%3$d remaining)', 'moodmoderator' ),
-						$rate_limit['calls_made'],
-						$rate_limit['limit'],
-						$rate_limit['remaining']
+						/* translators: 1: calls made, 2: limit, 3: remaining */
+						esc_html__( '%1$s / %2$s API calls this hour (%3$s remaining)', 'moodmoderator' ),
+						esc_html( number_format_i18n( $rate_limit['calls_made'] ) ),
+						esc_html( number_format_i18n( $rate_limit['limit'] ) ),
+						esc_html( number_format_i18n( $rate_limit['remaining'] ) )
 					);
 					?>
 				</td>
@@ -76,11 +79,11 @@ $cache_stats = $cache->get_cache_stats();
 				<td>
 					<?php
 					printf(
-						/* translators: %1$d: valid caches, %2$d: total, %3$d: expired */
-						esc_html__( '%1$d valid / %2$d total (%3$d expired)', 'moodmoderator' ),
-						$cache_stats['valid_caches'],
-						$cache_stats['total_cached'],
-						$cache_stats['expired_caches']
+						/* translators: 1: valid caches, 2: total, 3: expired */
+						esc_html__( '%1$s valid / %2$s total (%3$s expired)', 'moodmoderator' ),
+						esc_html( number_format_i18n( $cache_stats['valid_caches'] ) ),
+						esc_html( number_format_i18n( $cache_stats['total_cached'] ) ),
+						esc_html( number_format_i18n( $cache_stats['expired_caches'] ) )
 					);
 					?>
 				</td>

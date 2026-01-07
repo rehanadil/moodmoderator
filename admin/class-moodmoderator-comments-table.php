@@ -67,12 +67,20 @@ class MoodModerator_Comments_Table {
 		$confidence = $sentiment['confidence'];
 		$tone_class = 'moodmoderator-tone-' . strtolower( sanitize_html_class( $tone ) );
 
+		$confidence_percent = number_format_i18n( $confidence * 100, 0 );
+
 		printf(
-			'<span class="moodmoderator-tone-badge %s" title="%s">%s <span class="confidence">(%.0f%%)</span></span>',
+			'<span class="moodmoderator-tone-badge %s" title="%s">%s <span class="confidence">(%s%%)</span></span>',
 			esc_attr( $tone_class ),
-			esc_attr( sprintf( __( 'Confidence: %.0f%%', 'moodmoderator' ), $confidence * 100 ) ),
+			esc_attr(
+				sprintf(
+					/* translators: %s: confidence percentage */
+					__( 'Confidence: %s%%', 'moodmoderator' ),
+					$confidence_percent
+				)
+			),
 			esc_html( $tone ),
-			$confidence * 100
+			esc_html( $confidence_percent )
 		);
 	}
 
@@ -85,6 +93,7 @@ class MoodModerator_Comments_Table {
 		global $wpdb;
 
 		// Get all unique tones
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$tones = $wpdb->get_col(
 			"SELECT DISTINCT meta_value
 			FROM {$wpdb->commentmeta}
@@ -96,7 +105,14 @@ class MoodModerator_Comments_Table {
 			return;
 		}
 
-		$selected = isset( $_GET['moodmoderator_tone_filter'] ) ? sanitize_text_field( $_GET['moodmoderator_tone_filter'] ) : '';
+		$nonce = isset( $_GET['moodmoderator_filter_nonce'] )
+			? sanitize_text_field( wp_unslash( $_GET['moodmoderator_filter_nonce'] ) )
+			: '';
+		$nonce_valid = $nonce && wp_verify_nonce( $nonce, 'moodmoderator_filter_comments' );
+
+		$selected = $nonce_valid && isset( $_GET['moodmoderator_tone_filter'] )
+			? sanitize_text_field( wp_unslash( $_GET['moodmoderator_tone_filter'] ) )
+			: '';
 
 		echo '<select name="moodmoderator_tone_filter" id="moodmoderator_tone_filter">';
 		echo '<option value="">' . esc_html__( 'All Tones', 'moodmoderator' ) . '</option>';
@@ -111,6 +127,7 @@ class MoodModerator_Comments_Table {
 		}
 
 		echo '</select>';
+		wp_nonce_field( 'moodmoderator_filter_comments', 'moodmoderator_filter_nonce' );
 	}
 
 	/**
@@ -128,7 +145,15 @@ class MoodModerator_Comments_Table {
 			return $clauses;
 		}
 
-		$tone = sanitize_text_field( $_GET['moodmoderator_tone_filter'] );
+		$nonce = isset( $_GET['moodmoderator_filter_nonce'] )
+			? sanitize_text_field( wp_unslash( $_GET['moodmoderator_filter_nonce'] ) )
+			: '';
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'moodmoderator_filter_comments' ) ) {
+			return $clauses;
+		}
+
+		$tone = sanitize_text_field( wp_unslash( $_GET['moodmoderator_tone_filter'] ) );
 
 		// Add JOIN to commentmeta
 		$clauses['join'] .= $wpdb->prepare(
