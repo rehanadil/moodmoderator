@@ -1,4 +1,4 @@
-=== MoodModerator – AI Comment Moderation & Tone Analysis ===
+=== MoodModerator ===
 Contributors: rehanadil
 Tags: comments, moderation, ai, sentiment, openai
 Requires at least: 6.0
