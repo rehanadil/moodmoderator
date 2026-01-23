@@ -1,6 +1,6 @@
-=== MoodModerator ===
+=== MoodModerator - AI Comment Moderation & Sentiment Analysis ===
 Contributors: rehanadil
-Tags: comments, moderation, ai, sentiment, openai
+Tags: comments, moderation, ai, sentiment, openai, toxic, spam, sentiment analysis, comment filter
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-AI-powered comment sentiment analysis and automatic moderation using OpenAI. Keep your community positive and healthy.
+Automatically detect and moderate toxic comments using AI sentiment analysis. Keep your WordPress community positive with intelligent comment moderation powered by OpenAI.
 
 == Description ==
 
